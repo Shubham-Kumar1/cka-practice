@@ -1,0 +1,9 @@
+# Create a single-container Pod named nginx-pod running the nginx:1.21 image, exposing port 80.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+spec:
+  containers:
+    - image: nginx:1.21
+      name: nginx-container
