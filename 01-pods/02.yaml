@@ -1,0 +1,21 @@
+# Create a Pod multi-container-pod with 2 containers: one nginx, one busybox, sharing a volume mounted at /shared-data
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nginx-busybox
+spec:
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+  containers:
+  - name: nginx-container
+    image: nginx
+    volumeMounts:
+      - name: shared-data
+        mountPath: /usr/share/nginx/html # yeh container ke iss wale location me common hai
+  - name: busybox
+    image: busybox
+    volumeMounts:
+      - name: shared-data
+        mountPath: /shared-data # yeh container ke iss wale location me common hai
+    command: ['sh', '-c', 'echo Hello from BusyBox > /shared-data/hello.txt && sleep 3600']
