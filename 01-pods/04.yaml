@@ -1,0 +1,22 @@
+# Create a Pod with initContainers that runs busybox and prints Initialization complete before main container starts.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: initcontainer
+  labels:
+    c1: initContainers
+    c2: nginxContainers
+spec:
+  initContainers:
+    - name: busybox-init
+      image: busybox
+      command:
+        - echo
+        - "Initialization complete before main container starts; sleep 5"
+  containers:
+    - name: nginx-container
+      image: nginx
+
+#output:
+#kubectl logs initcontainer -c busybox-init                                                                                         kube gcp-devops/cka
+#Initialization complete before main container starts; sleep 5
