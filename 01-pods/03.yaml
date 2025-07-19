@@ -1,0 +1,29 @@
+# Create a Pod with a livenessProbe using HTTP GET /healthz on port 8080 and a readinessProbe using exec command.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: livenessreadiness
+  labels:
+    check1: livenessprobe
+    check2: readinessprobe
+spec:
+  containers:
+    - name: liveness-readiness
+      image: registry.k8s.io/e2e-test-images/agnhost:2.40
+      args:
+        - netexec
+        - --http-port=8080
+      ports:
+        - containerPort: 8080
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 5
+      readinessProbe:
+        httpGet:
+          path: /healthz
+          port: 8080
+        initialDelaySeconds: 5
+        periodSeconds: 5
