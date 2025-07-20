@@ -1,0 +1,25 @@
+# Create a Pod running a container that consumes a ConfigMap as environment variables.
+---
+#configmap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pod-cm
+data:
+  author: shubham
+---
+# pod
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod-with-cm
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    env:
+      - name: AUTHOR # name is the environment variable name to be set in the container.
+        valueFrom:
+          configMapKeyRef:
+            name: pod-cm
+            key: author
