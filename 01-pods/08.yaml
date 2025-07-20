@@ -1,0 +1,20 @@
+# Create a Pod that uses a hostPath volume to mount /data/logs from the host into the container.
+# Ref: https://zesty.co/finops-glossary/what-is-hostpath-in-kubernetes/
+---
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: pod-hostpath
+spec:
+  volumes:
+  - name: config-volume
+    hostPath:
+      path: /etc/my-config
+      type: DirectoryOrCreate # create the directory if it doesn’t exist
+  containers:
+  - name: busybox
+    image: busybox
+    volumeMounts:
+    - mountPath: /app/config
+      name: config-volume
+    command: ['sh', '-c', 'echo Hello from BusyBox > /app/config/hello.txt && sleep 3600']
