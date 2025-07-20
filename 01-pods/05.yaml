@@ -1,0 +1,17 @@
+# Create a Pod with command and args overriding image default entrypoint.
+apiVersion: v1 
+kind: Pod
+metadata:
+  name: overriding-default-entrypoint
+spec:
+   containers:
+    - name: nginx
+      image: nginx
+      command:
+      - "/bin/sh"
+      - "-c"
+      args:
+      - "sleep 300"
+
+# Instead of running the nginx server (the default nginx image behavior), your Pod runs /bin/sh -c "sleep 300".
+# This completely overrides the default entrypoint and arguments of the nginx image.
