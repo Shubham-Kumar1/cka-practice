@@ -1,0 +1,33 @@
+# Create a Pod that mounts a Secret as a volume at /etc/secret-data.
+--- 
+kind: Secret
+apiVersion: v1
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  user: c2h1YmhhbQ==
+  password: c2VjcmV0
+
+---
+kind: Pod
+apiVersion: v1
+metadata:
+  name: my-pod
+spec:
+  volumes:
+  - name: vol-secret
+    secret:
+      secretName: my-secret
+  containers:
+  - name: c1
+    image: busybox
+    command:
+    - sleep
+    - '3600'
+    volumeMounts:
+    - name: vol-secret
+      mountPath: /etc/app/secrets
+
+
+# If you mount a secret (ie..not used environment varialbes for secrets) if the secret changes it automagically gets updated in the container.
