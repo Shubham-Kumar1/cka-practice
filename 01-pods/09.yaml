@@ -1,0 +1,19 @@
+# Create a Pod with a CPU limit of 500m and memory limit of 256Mi.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-request-limit
+  labels:
+    check1: cpu
+    check2: memory
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    resources:
+      requests:
+        cpu: 250m
+        memory: 128Mi
+      limits:
+        cpu: 500m
+        memory: 256Mi
