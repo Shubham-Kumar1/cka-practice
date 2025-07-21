@@ -1,0 +1,18 @@
+# Create a Pod that runs only if node has the label type=highmem using nodeSelector.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-nodeselector
+spec:
+  containers:
+  - name: nginx-cont
+    image: nginx
+    resources:
+      requests:
+        cpu: 250m
+        memory: 128Mi
+      limits: 
+        cpu: 500m
+        memory: 256Mi
+  nodeSelector:
+    type: highmem
