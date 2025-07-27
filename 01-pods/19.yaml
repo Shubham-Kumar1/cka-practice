@@ -1,0 +1,21 @@
+# Create a Pod with resource requests for CPU: 250m and memory: 128Mi.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-resources
+spec:
+  #  Pod level resources limit
+  # resources:
+  #   requests:
+  #     cpu: 250m
+  #     memory: 128Mi
+  containers:
+  - name: nginx-cont
+    image: nginx
+    #  Container level resources limit
+    resources:
+      requests:
+        cpu: 250m
+        memory: 128Mi
+  
