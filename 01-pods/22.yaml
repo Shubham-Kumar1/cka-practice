@@ -1,0 +1,17 @@
+# Create a Pod that writes logs to a file inside the container at /var/log/app.log.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: log-writer
+spec:
+  containers:
+  - name: log-writer
+    image: busybox:1.28
+    args: [ "sh", "-c", "while true; do echo $(date) 'Hello from Pod!' >> /var/log/app.log; sleep 5; done" ]
+    volumeMounts:
+    - name: log-volume
+      mountPath: /var/log
+  volumes:
+  - name: log-volume
+    emptyDir: {}
