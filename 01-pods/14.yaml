@@ -1,0 +1,46 @@
+# Create a Pod that uses a projected volume combining Secret and ConfigMap.
+# Ref: https://kubernetes.io/docs/concepts/storage/projected-volumes/
+# Projected Volume ->  volume maps several existing volume sources into the same directory.
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysecret
+type: Opaque
+data:
+  username: c2h1YmhhbQ==
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: myconfigmap
+data:
+  config: abc
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: projected-volume-pod 
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - name: all-in-one
+      mountPath: "/projected-volume"    #at this location we can find all the volumes mounted at one place
+      readOnly: true
+  volumes:
+  - name: all-in-one
+    projected:
+      sources:
+      - secret:
+          name: mysecret
+          items:
+            - key: username
+              path: my-group/my-username # path inside the /projected-volume
+      - configMap:
+          name: myconfigmap
+          items:
+            - key: config
+              path: my-group/my-config # path inside the /projected-volume
