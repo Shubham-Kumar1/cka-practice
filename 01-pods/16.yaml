@@ -1,0 +1,17 @@
+# Create a Pod and attach a debug container using kubectl debug.
+
+# kubectl debug is the standard Kubernetes way to inject a debug container into a running Pod or to create a modified,
+# debuggable copy of an existing Pod. It's a safer and cleaner way to investigate application issues than making changes
+#to deployment or container images just for troubleshooting
+
+
+# This command creates a Pod called myapp using the busybox image, which sleeps for a day to keep the Pod running.
+kubectl run myapp --image=busybox:1.28 --restart=Never -- sleep 1d
+
+# kubectl debug myapp -it --image=ubuntu --share-processes --copy-to=myapp-debug
+
+myapp: Name of the original Pod.
+-it: Allocates a TTY and starts interactive mode.
+--image=ubuntu: Uses the Ubuntu image for the debug container (which has more debugging tools than BusyBox).
+--share-processes: Shares the process namespace, so you can see processes from both containers.
+--copy-to=myapp-debug: Actually creates a copy of the myapp Pod called myapp-debug with your debugging container added.
