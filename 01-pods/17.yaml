@@ -1,0 +1,24 @@
+# Create a Pod with an ephemeral volume using emptyDir.
+# Ref: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-emptydir
+spec:
+  containers:
+  - image: busybox
+    name: busbox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - mountPath: /cache
+      name: cache-volume
+  - image: nginx
+    name: nginx
+    volumeMounts:
+    - mountPath: /nginx-data
+      name: cache-volume
+  volumes:
+  - name: cache-volume
+    emptyDir:
+      sizeLimit: 500Mi
