@@ -1,0 +1,21 @@
+# Create a Pod that uses imagePullPolicy: Always and imagePullSecrets to pull from a private registry.
+# https://dev.to/0x2633/how-to-pull-the-images-on-gcp-artifact-registry-from-on-premise-k8s-6o4
+
+
+
+#--- concept ---
+# For pulling an image from private registry: few things that need to be covered are:
+  # complete path of the image : (like, project-name,repo,image and tag)
+  # a service account which has necessary roles / appropriate permissions to get the image from private repo
+  # create a kubernetes secret with the help of the service-account.json file
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: private-registry
+spec:
+  containers:
+  - name: private-container
+    image: LOCATION-docker.pkg.dev/PROJECT-ID/REPOSITORY/IMAGE:TAG
+  imagePullSecrets:
+  - name: gcp-artifact-registry
