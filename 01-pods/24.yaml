@@ -1,0 +1,38 @@
+# Create a Pod with volumeMounts.subPath to mount part of a volume.
+# https://stackoverflow.com/questions/65399714/what-is-the-difference-between-subpath-and-mountpath-in-kubernetes
+
+#start
+
+# mountPath shows where the referenced volume should be mounted in the container. For instance, if you mount a volume to mountPath: /a/b/c, the volume will be available to the container under the directory /a/b/c.
+
+# Mounting a volume will make all of the volume available under mountPath. If you need to mount only part of the volume, such as a single file in a
+#volume, you use subPath to specify the part that must be mounted. For instance, mountPath: /a/b/c, subPath: d will make whatever d is in the mounted
+# volume under directory /a/b/c
+
+#end
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-volumemount-subpath
+spec:
+  volumes:
+    - name: shared-data
+      emptyDir: {}
+  containers:
+    - name: c1
+      image: busybox
+      command: ["sleep","3600"]
+      volumeMounts:
+        - name: shared-data
+          mountPath: /c1/data
+          subPath: c1
+    - name: c2
+      image: busybox
+      command: ["sleep","3600"]
+      volumeMounts:
+        - name: shared-data
+          mountPath: /c2/data
+          subPath: c2
+
