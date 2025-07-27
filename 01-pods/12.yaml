@@ -17,5 +17,6 @@ spec:
   containers:
   - name: private-container
     image: LOCATION-docker.pkg.dev/PROJECT-ID/REPOSITORY/IMAGE:TAG
+  imagePullPolicy: Always #ifNotPresent Always Never
   imagePullSecrets:
   - name: gcp-artifact-registry
