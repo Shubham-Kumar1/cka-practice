@@ -1,5 +1,5 @@
 # Create a Pod with securityContext set to run as user 1001 and with readOnlyRootFilesystem.
-
+# Ref: https://medium.com/datamindedbe/improve-the-security-of-pods-on-kubernetes-3e4a81534674
 apiVersion: v1
 kind: Pod
 metadata:
@@ -17,4 +17,6 @@ spec:
     command: [ "sh", "-c", "sleep 1h" ]
     securityContext:
       readOnlyRootFilesystem: true
+      runAsUser: 1001
+      runAsNonRoot: true
 
