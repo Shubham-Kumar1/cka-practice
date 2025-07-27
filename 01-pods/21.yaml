@@ -1,0 +1,41 @@
+# Create a Pod that mounts a downward API volume to access metadata.
+# Ref: https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubernetes-downwardapi-volume-example
+  labels:
+    zone: aisa-south
+    cluster: kind
+    rack: br-25
+  annotations:
+    build: five
+    builder: shubham
+spec:
+  containers:
+    - name: client-container
+      image: registry.k8s.io/busybox:1.27.2
+      command: ["sh", "-c"]
+      args:
+      - while true; do
+          if [[ -e /etc/podinfo/labels ]]; then
+            echo -en '\n\n'; cat /etc/podinfo/labels; fi;
+          if [[ -e /etc/podinfo/annotations ]]; then
+            echo -en '\n\n'; cat /etc/podinfo/annotations; fi;
+          sleep 5;
+        done;
+      volumeMounts:
+        - name: podinfo
+          mountPath: /etc/podinfo
+  volumes:
+    - name: podinfo
+      downwardAPI:
+        items:
+          - path: "labels"
+            fieldRef:
+              fieldPath: metadata.labels
+          - path: "annotations"
+            fieldRef:
+              fieldPath: metadata.annotations
+
