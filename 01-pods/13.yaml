@@ -1,0 +1,14 @@
+#  Create a Pod in a custom namespace custom-ns.
+
+# The namespace must be present before applying the file
+# kubectl create namespace custom-ns
+
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: custompodnamespace
+  namespace: custom-ns
+spec:
+  containers:
+    - name: nginx
+      image: nginx
