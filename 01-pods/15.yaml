@@ -1,0 +1,10 @@
+# Create a Pod with restartPolicy: OnFailure.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-restart
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+  restartPolicy: Always   # Always OnFailure Never
