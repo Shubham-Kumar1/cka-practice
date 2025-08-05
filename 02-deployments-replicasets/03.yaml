@@ -1,0 +1,3 @@
+# Roll back Deployment to previous version using kubectl rollout undo.
+
+# kubectl rollout undo deploy web-deploy
