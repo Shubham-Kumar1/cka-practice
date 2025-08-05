@@ -1,0 +1,3 @@
+# Perform a rolling update to upgrade image from nginx:1.21 to nginx:1.23.
+
+# kubectl set image deployments web-deploy nginx=nginx:1.23
