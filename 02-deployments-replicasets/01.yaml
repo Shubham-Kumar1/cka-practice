@@ -1,0 +1,26 @@
+# Create a Deployment web-deploy with 3 replicas running nginx:1.21, with labels app=web.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deploy
+  labels:
+    app: web
+spec: 
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.21
+          ports:
+            - containerPort: 80
+
+# imperative command 
+# kubectl create deployment web-deploy --image=nginx:1.21 --replicas=3
+# kubectl label deployment web-deploy app=web
