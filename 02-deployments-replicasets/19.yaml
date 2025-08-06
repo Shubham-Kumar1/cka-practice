@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: busybox-custom-command
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: busybox-app
+  template:
+    metadata:
+      labels:
+        app: busybox-app
+    spec:
+      containers:
+      - name: busybox-container
+        image: busybox:latest  # Using the latest busybox image
+        command: ["/bin/sh", "-c"] # This overrides the image's ENTRYPOINT with /bin/sh -c.
+        args: ["echo 'Custom BusyBox logic executed!'; sleep 60"] # This overrides the image's CMD with a custom script.
