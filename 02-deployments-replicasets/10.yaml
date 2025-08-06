@@ -1,0 +1,5 @@
+# This is 10.yaml
+
+kubectl delete deploy web-deploy
+
+kubectl get rs
