@@ -1,0 +1,6 @@
+
+# Observe ReplicaSet created under Deployment and inspect revision history.
+
+kubectl describe rs web-deploy-59b8f44fbb | grep Image
+
+kubectl rollout history deploy web-deploy
