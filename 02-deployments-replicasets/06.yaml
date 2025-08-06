@@ -1,5 +1,5 @@
 # Add a livenessProbe to auto-recover on failure.
-# Ref: https://spacelift.io/blog/kubectl-patch-command#overview-of-kubernetes-resources 
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
