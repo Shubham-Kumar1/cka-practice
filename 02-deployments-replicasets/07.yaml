@@ -1,2 +1,22 @@
 # Patch Deployment to update container environment variable without redeployment.
 
+Ref: https://spacelift.io/blog/kubectl-patch-command#overview-of-kubernetes-resources
+
+kubectl patch deployment web-deploy --type=merge --patch '{
+  "spec": {
+    "template": {
+      "spec": {
+        "containers": [
+          {
+            "name": "nginx",
+            "image": "nginx:1.23",
+            "env": [
+              {
+                "name": "name",
+                "value": "shubham"
+              }
+            ]
+          }
+        ]
+      }
+    } 
