@@ -1,0 +1,54 @@
+# Mount a PVC into a Deployment container.
+# Ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      volumes:
+      - name: pv
+        persistentVolumeClaim: 
+          claimName: pvc
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: pv
