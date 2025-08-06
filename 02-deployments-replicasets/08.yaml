@@ -1,0 +1,5 @@
+# Pause rollout of Deployment and resume it later.
+
+kubectl rollout pause deployment web-deploy  
+
+kubectl rollout resume deployment web-deploy  
