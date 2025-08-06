@@ -1,4 +1,4 @@
-# This is 23.yaml
+# View Deployment status with kubectl rollout status
 
 kubectl apply -f 01.yaml                                         
 >> deployment.apps/web-deploy created
