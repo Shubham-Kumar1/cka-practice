@@ -1,0 +1,4 @@
+# Apply a Deployment using kubectl apply -f and observe the diff using kubectl diff.
+>> kubectl diff is a safe preview command that shows you the differences between your
+  local configuration (YAML/manifest file) and the live state of a Kubernetes resource
+  before you apply any changes.
