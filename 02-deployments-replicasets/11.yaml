@@ -1,0 +1,26 @@
+# Set maxSurge=1 and maxUnavailable=0 for controlled update.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: my-deployment
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx
+        ports:
+          - containerPort: 80
