@@ -1,0 +1,29 @@
+# This is 23.yaml
+
+kubectl apply -f 01.yaml                                         
+>> deployment.apps/web-deploy created
+
+kubectl set image deployments web-deploy nginx=nginx:1.23        
+>> deployment.apps/web-deploy image updated
+
+kubectl annotate deploy web-deploy kubernetes.io/change-cause="updated the nginx image to 1.23"
+>> deployment.apps/web-deploy annotated
+
+kubectl rollout history deploy web-deploy                        
+>> deployment.apps/web-deploy 
+    REVISION  CHANGE-CAUSE
+    1         <none>
+    2         updated the nginx image to 1.23
+
+kubectl set image deployments web-deploy nginx=nginx:latest      
+>> deployment.apps/web-deploy image updated
+
+kubectl annotate deploy web-deploy kubernetes.io/change-cause="updated the nginx image to latest"
+>> deployment.apps/web-deploy annotated
+
+kubectl rollout history deploy web-deploy                        
+>> deployment.apps/web-deploy 
+    REVISION  CHANGE-CAUSE
+    1         <none>
+    2         updated the nginx image to 1.23
+    3         updated the nginx image to latest
