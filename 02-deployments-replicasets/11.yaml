@@ -1,4 +1,5 @@
 # Set maxSurge=1 and maxUnavailable=0 for controlled update.
+# ref: https://medium.com/@bubu.tripathy/understanding-maxsurge-and-maxunavailable-4966dfafc8ba
 
 apiVersion: apps/v1
 kind: Deployment
