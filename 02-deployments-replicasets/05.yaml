@@ -1,3 +1,4 @@
+# Add a readinessProbe to pause traffic during start.
 apiVersion: apps/v1
 kind: Deployment
 metadata:
