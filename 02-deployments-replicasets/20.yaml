@@ -1,0 +1,26 @@
+# Create a Deployment with multiple containers.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multi-container
+spec:
+  selector:
+    matchLabels:
+      app: multi
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      name: muti-container
+      labels: 
+        app: multi
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+      - name: busybox
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args: ["echo `Hello World`; sleep 600"]
