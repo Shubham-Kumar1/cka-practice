@@ -1,0 +1,18 @@
+# Create Pod with ephemeral inline volume using emptyDir.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-emptydir
+spec:
+  volumes:
+    - name: emptydir-volume
+      emptyDir:
+        sizeLimit: 500Mi
+  containers:
+    - name: busybox
+      image: busybox
+      command: ["/bin/sh", "-c"]
+      args: ["sleep 600"]
+      volumeMounts:
+        - name: emptydir-volume
+          mountPath: /cache
