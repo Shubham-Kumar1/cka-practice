@@ -1,0 +1,77 @@
+# Delete a PVC and inspect if PV is retained.
+`POC remember`
+---
+
+## ✅ What You’re Seeing
+
+| Behavior                | Expected Outcome                     |
+| ----------------------- | ------------------------------------ |
+| **PVC deleted**         | PV gets deleted (if policy = Delete) |
+| **PV deleted**          | PV object gone from cluster          |
+| **Data at `/data/pv1`** | ❗ **Still present on node**          |
+
+---
+
+## 🔍 Why Is Data Still There?
+
+* The **`Delete` reclaim policy** only applies to the **PV object and the underlying storage** if:
+
+  * It was **dynamically provisioned**
+  * The provisioner (e.g. EBS, GCE PD, etc.) knows how to delete the backend volume
+
+* You are using:
+
+  * **Static provisioning** (you created the PV manually)
+  * **`hostPath`**, which is just a path on the node’s filesystem (e.g., kind container)
+
+➡️ So **Kubernetes deletes the PV object**, but **doesn’t touch the local disk path** (`/data/pv1`), because:
+
+* It has no permission to remove host files directly
+* It doesn’t know whether something else is using them
+
+---
+
+## 🧪 Summary of Your PoC
+
+| Step                   | Result                      |
+| ---------------------- | --------------------------- |
+| PVC deleted            | ✅ Gone                      |
+| PV deleted             | ✅ Gone                      |
+| `/data/pv1/index.html` | ✅ Still there (as expected) |
+
+---
+
+## 🧹 If You Want Cleanup
+
+To remove the leftover data:
+
+### Option 1: From inside the kind node container
+
+```bash
+docker exec -it <kind-node-name> rm -rf /data/pv1
+```
+
+### Option 2: Automate with a `post-delete` Job (advanced use case)
+
+You can write a Kubernetes `Job` or script to delete the path if needed — let me know if you'd like that.
+
+---
+
+## ✅ Want to Test `Retain`?
+
+Try switching to:
+
+```yaml
+persistentVolumeReclaimPolicy: Retain
+```
+
+Then:
+
+1. Create pod → write data
+2. Delete **pod + PVC**
+3. Check:
+
+   * PV will be in `Released` state
+   * `/data/pv1/index.html` still exists
+4. You can **re-bind a new PVC** to it manually
+---
