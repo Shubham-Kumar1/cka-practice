@@ -1,0 +1,14 @@
+# Create a PersistentVolume (PV) of 1Gi storage backed by hostPath at /data/pv1.
+
+apiVersion: v1 
+kind: PersistentVolume
+metadata:
+  name: pv1
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  hostPath:
+    path: "/data/pv1"
+  accessModes:
+    - ReadWriteOnce

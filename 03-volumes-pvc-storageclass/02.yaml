@@ -1,0 +1,13 @@
+# Create a PersistentVolumeClaim (PVC) of 1Gi storage using ReadWriteOnce access mode.
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: pvc-1
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

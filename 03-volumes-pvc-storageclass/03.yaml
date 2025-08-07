@@ -1,0 +1,19 @@
+# Create a Pod that uses a PVC to mount data at /mnt/data.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  volumes:
+    - name: pv1
+      persistentVolumeClaim:
+        claimName: pvc-1
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args: ["echo 'hello from K8s' >> /mnt/data/index.html; sleep 3600"]
+    volumeMounts:
+      - mountPath: "/mnt/data"
+        name: pv1
