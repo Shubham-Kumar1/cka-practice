@@ -1,0 +1,9 @@
+# Verify volume expansion status.
+
+>> kubectl get pvc pvc-1 -o yaml 
+
+Condition	Meaning
+requests.storage > capacity.storage	Resize is in progress
+requests.storage == capacity.storage	Resize is complete
+FileSystemResizePending	Resize done at volume level, pod restart needed
+No conditions	Resize fully completed and mounted

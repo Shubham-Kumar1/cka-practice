@@ -1,0 +1,31 @@
+# Delete a PVC and recreate Pod to observe behavior.
+
+k get pv                                                    
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv1    1Gi        RWO            Retain           Bound    default/pvc-1   manual         <unset>                          2m36s
+
+k get pvc                                                   
+NAME    STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+pvc-1   Bound    pv1      1Gi        RWO            manual         <unset>                 2m36s
+
+k get pods                                                  
+NAME    READY   STATUS    RESTARTS   AGE
+pod-1   1/1     Running   0          10s
+
+---
+
+k get pv                                                    
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv1    1Gi        RWO            Retain           Released   default/pvc-1   manual         <unset>                          4m16s
+
+k get pvc                                                   
+NAME    STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+pvc-1   Pending                                      manual         <unset>                 13s
+
+k get pods                                                  
+NAME    READY   STATUS    RESTARTS   AGE
+pod-1   0/1     Pending   0          8s
+
+# first make the pv available from released state by clearing the claimRef from pv
+# after it is available again bound the pvc, it will go from status pending to Bound
+# after that pod will also go from pending to Running status
