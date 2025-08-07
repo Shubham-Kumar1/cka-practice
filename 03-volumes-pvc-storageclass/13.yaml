@@ -1,0 +1,27 @@
+# Use subPath in volumeMount to map only sub-directory.
+# Ref: https://kubernetes.io/docs/concepts/storage/volumes/
+apiVersion: v1
+kind: Pod
+metadata:
+  name: subpath-test
+spec:
+  containers:
+  - name: init
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args:
+      - mkdir -p /data/foo && echo "This is foo" > /data/foo/index.html &&
+        mkdir -p /data/bar && echo "This is bar" > /data/bar/index.html &&
+        sleep 600
+    volumeMounts:
+    - name: shared-volume
+      mountPath: /data
+  - name: app
+    image: nginx
+    volumeMounts:
+    - name: shared-volume
+      mountPath: /usr/share/nginx/html
+      subPath: foo  # Mount only the 'foo' subdirectory
+  volumes:
+  - name: shared-volume
+    emptyDir: {}
