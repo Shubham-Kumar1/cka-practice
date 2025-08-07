@@ -1,0 +1,32 @@
+# Use nodeSelector to schedule Pod on node with label tier=backend.
+# kubectl get nodes                                                         
+# NAME                  STATUS     ROLES           AGE    VERSION
+# local-control-plane   NotReady   control-plane   2d7h   v1.33.1
+# local-worker          Ready      <none>          2d7h   v1.33.1
+# local-worker2         Ready      <none>          2d7h   v1.33.1
+
+# kubectl get nodes local-worker --show-labels                              
+# NAME           STATUS   ROLES    AGE    VERSION   LABELS
+# local-worker   Ready    <none>   2d7h   v1.33.1   beta.kubernetes.io/arch=arm64,beta.kubernetes.io/os=linux,kubernetes.io/arch=arm64,kubernetes.io/hostname=local-worker,kubernetes.io/os=linux
+
+# kubectl label nodes local-worker tier=backend                             
+# node/local-worker labeled
+
+# kubectl get nodes local-worker --show-labels                              
+# NAME           STATUS   ROLES    AGE    VERSION   LABELS
+# local-worker   Ready    <none>   2d7h   v1.33.1   beta.kubernetes.io/arch=arm64,beta.kubernetes.io/os=linux,kubernetes.io/arch=arm64,kubernetes.io/hostname=local-worker,kubernetes.io/os=linux,tier=backend
+
+--- 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-nodeselector
+spec:
+  nodeSelector:
+    tier: backend
+  containers:
+    - name: nginx
+      image: nginx
+
+# Output
+#   Normal  Scheduled  14s   default-scheduler  Successfully assigned default/pod-nodeselector to local-worker
