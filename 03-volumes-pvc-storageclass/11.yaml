@@ -1,0 +1,79 @@
+# Create multiple PVCs and mount them in one Pod.
+
+#pv-1
+apiVersion: v1 
+kind: PersistentVolume
+metadata:
+  name: pv-1
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 3Gi
+  hostPath:
+    path: "/data/pv1"
+  accessModes:
+    - ReadWriteOnce
+---
+#pv-2
+apiVersion: v1 
+kind: PersistentVolume
+metadata:
+  name: pv-2
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  hostPath:
+    path: "/data/pv2"
+  accessModes:
+    - ReadWriteOnce
+---
+#pvc-1
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: pvc-1
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+#pvc-2
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata: 
+  name: pvc-2
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+# pod using multiple PVC's
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-1
+spec:
+  volumes:
+    - name: data-vol-1
+      persistentVolumeClaim:
+        claimName: pvc-1
+    - name : data-vol-2
+      persistentVolumeClaim:
+        claimName: pvc-2
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["/bin/sh", "-c"]
+    args: ["echo 'hello from K8s' >> /mnt/data1/index.html; sleep 3600"]
+    volumeMounts:
+      - name: data-vol-1
+        mountPath: "/mnt/data1"
+      - name: data-vol-2
+        mountPath: "/mnt/data2" 
