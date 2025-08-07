@@ -1,0 +1,23 @@
+# Use preferredDuringScheduling to give soft preference.
+
+# >> kubectl label nodes local-worker2 disktype=ssd
+# node/local-worker2 labeled
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: preferred-pod
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: disktype
+                operator: In
+                values:
+                  - ssd
+  containers:
+    - name: my-container
+      image: nginx
