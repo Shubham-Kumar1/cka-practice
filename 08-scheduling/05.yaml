@@ -1,0 +1,18 @@
+# Taint a node and schedule Pod with matching toleration.
+
+# kubectl taint nodes local-worker schedule=false:NoSchedule                kube kind-local
+# node/local-worker tainted
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-toleration
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+  tolerations:
+    - key: "schedule"
+      operator: "Equal"
+      value: "false"
+      effect: "NoSchedule"
