@@ -1,0 +1,21 @@
+# Reuse a released PV by resetting its claimRef.
+
+kubectl apply -f 01.yaml
+
+kubectl apply -f 02.yaml
+
+kubectl delete pvc pvc-1
+
+> k get pv                                                 
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM           STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv1    1Gi        RWO            Retain           Released   default/pvc-1   manual         <unset>                          44s
+
+
+> k edit pv pv1
+  delete the contents falling under claimRef
+
+> k get pv                                                 
+NAME   CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pv1    1Gi        RWO            Retain           Available           manual         <unset>                          5m55s
+
+the status is AVAILABLE now, we can reuse with another pvc
