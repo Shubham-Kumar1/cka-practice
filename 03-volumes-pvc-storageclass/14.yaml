@@ -1,0 +1,13 @@
+# Resize a PVC by updating its spec.
+
+>> Storage class must allow volume expansion:
+
+>> check if allowVolumeExpansion: true
+
+>> PVC must use a storage class that supports volume expansion.
+
+>> If PVC doesn’t resize:
+    Make sure allowVolumeExpansion: true.
+    The volume plugin/CSI driver must support expansion.
+    Some cloud providers (like AWS EBS, GCE PD, etc.) support it, but others may not.
+
