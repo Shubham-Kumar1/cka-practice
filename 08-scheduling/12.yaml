@@ -1,0 +1,9 @@
+# Create a custom PriorityClass with high value.
+
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: custom-priorityclass
+globalDefault: false
+value: 10000000
+description: "This is a custom priority class which has higher value"
