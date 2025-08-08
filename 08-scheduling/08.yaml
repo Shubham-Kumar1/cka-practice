@@ -1,0 +1,35 @@
+# Manually drain a node and reschedule Pods.
+
+
+>> kubectl drain --ignore-daemonsets local-worker                                                                
+node/local-worker already cordoned
+
+>rning: ignoring DaemonSet-managed Pods: 
+evicting pod default/myapp-deployment-7d799df89-9hs99
+evicting pod default/myapp-deployment-7d799df89-xckrq
+evicting pod default/myapp-deployment-7d799df89-v2rtq
+pod/myapp-deployment-7d799df89-xckrq evicted
+pod/myapp-deployment-7d799df89-v2rtq evicted
+pod/myapp-deployment-7d799df89-9hs99 evicted
+node/local-worker drained
+
+>> kubectl get pods -o wide                                                                                      
+NAME                               READY   STATUS    RESTARTS   AGE   IP            NODE            NOMINATED NODE   READINESS GATES
+myapp-deployment-7d799df89-7ktmg   0/1     Pending   0          6s    <none>        <none>          <none>           <none>
+myapp-deployment-7d799df89-b4v87   1/1     Running   0          11m   10.244.1.19   local-worker2   <none>           <none>
+myapp-deployment-7d799df89-fx5bj   0/1     Pending   0          6s    <none>        <none>          <none>           <none>
+myapp-deployment-7d799df89-jr658   1/1     Running   0          11m   10.244.1.18   local-worker2   <none>           <none>
+myapp-deployment-7d799df89-ksc2c   0/1     Pending   0          6s    <none>        <none>          <none>           <none>
+myapp-deployment-7d799df89-mjw9x   1/1     Running   0          11m   10.244.1.17   local-worker2   <none>           <none>
+
+>> kubectl uncordon local-worker                                                                                 
+node/local-worker uncordoned
+
+>> kubectl get pods -o wide                                                                                      
+NAME                               READY   STATUS              RESTARTS   AGE   IP            NODE            NOMINATED NODE   READINESS GATES
+myapp-deployment-7d799df89-7ktmg   0/1     ContainerCreating   0          19s   <none>        local-worker    <none>           <none>
+myapp-deployment-7d799df89-b4v87   1/1     Running             0          11m   10.244.1.19   local-worker2   <none>           <none>
+myapp-deployment-7d799df89-fx5bj   0/1     ContainerCreating   0          19s   <none>        local-worker    <none>           <none>
+myapp-deployment-7d799df89-jr658   1/1     Running             0          11m   10.244.1.18   local-worker2   <none>           <none>
+myapp-deployment-7d799df89-ksc2c   0/1     ContainerCreating   0          19s   <none>        local-worker    <none>           <none>
+myapp-deployment-7d799df89-mjw9x   1/1     Running             0          11m   10.244.1.17   local-worker2   <none>           <none>
