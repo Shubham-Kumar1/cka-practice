@@ -1,0 +1,20 @@
+# Simulate scheduler stuck on unsatisfiable Pod.
+apiVersion: v1  
+kind: Pod
+metadata:
+  name: unsatisfiable-pod
+spec:
+  nodeSelector:
+    nonexistent-label: "true"   # this label is not present on any of the node
+  containers:                   # it will be in pending state
+    - name: nginx
+      image: nginx
+
+# NAME                READY   STATUS    RESTARTS   AGE
+# unsatisfiable-pod   0/1     Pending   0          59s
+
+# Events:
+#   Type     Reason            Age   From               Message
+#   ----     ------            ----  ----               -------
+#   Warning  FailedScheduling  18s   default-scheduler  0/3 nodes are available: 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: },
+#   2 node(s) didn't match Pod's node affinity/selector. preemption: 0/3 nodes are available: 3 Preemption is not helpful for scheduling.
