@@ -1,0 +1,12 @@
+# Use nodeName to bind Pod directly to a node.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-nodename
+spec:
+  nodeName: local-worker #schedule the pod on node names local-worker
+  containers:
+  - name: nginx
+    image: nginx
+
