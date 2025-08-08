@@ -1,0 +1,32 @@
+# Configure podTopologySpreadConstraints.
+
+# kubectl label nodes local-worker topology.kubernetes.io/zone=zone-a       
+# node/local-worker labeled
+
+# kubectl label nodes local-worker2 topology.kubernetes.io/zone=zone-b      
+# node/local-worker2 labeled
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone # yeh wala key ko match karega nodes ke label se
+          whenUnsatisfiable: DoNotSchedule  # agar mila to schedule else nahi karega schedule another: ScheduleAnyway
+          labelSelector: # yaha par wala label wo hai jisko dekh ke maxSkew calcualte karega
+            matchLabels:
+              app: myapp
+      containers:
+        - name: nginx
+          image: nginx
