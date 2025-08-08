@@ -1,0 +1,18 @@
+# Avoid node with NoExecute taint.
+
+# Feature	                    NoSchedule	                NoExecute
+# New Pods scheduled?	        ❌ Unless they tolerate	   ❌ Unless they tolerate
+# Existing Pods evicted?  	  ✅ Stay regardless	         ❌ Evicted unless they tolerate
+
+# kubectl taint nodes local-worker key=value:NoExecute
+# yeh karne se jo pehle pods already chal rahe hai node local-worker pe wo bhi terminate ho jayenge
+# and agar koi pod schedule karna chahte ho to uske tolerations ke sath run karna padega
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx2
+spec:
+  containers:
+    - name: nginx
+      image: nginx
