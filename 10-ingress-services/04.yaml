@@ -1,0 +1,12 @@
+# Use headless service for StatefulSet.
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-headless
+spec:
+  clusterIP: None
+  selector:
+    app: web
+  ports:
+    - port: 80
+      targetPort: 80
