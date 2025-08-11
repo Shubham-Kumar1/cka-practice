@@ -1,0 +1,13 @@
+# Create NodePort for nginx, expose on port 30080.
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-svc-np
+spec:
+  selector:
+    app: web
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30005
