@@ -1,0 +1,15 @@
+# Create LoadBalancer service in cloud environment.
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: nginx-svc-lb
+spec:
+  selector:
+    app: web
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+
+# this will give an external IPonly on cloud
