@@ -1,0 +1,3 @@
+# Validate access using kubectl auth can-i.
+
+>> kubectl auth can-i list namespaces --as=system:serviceaccount:dev:dev-user
