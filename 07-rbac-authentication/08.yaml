@@ -1,0 +1,36 @@
+# Allow only create on deployments in a namespace.
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: deployment-creator
+  namespace: dev
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+
+---
+# check on dev-user
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: deployment-creator-binding
+  namespace: dev
+roleRef:
+  name: deployment-creator
+  kind: Role
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- namespace: dev
+  kind: ServiceAccount
+  name: dev-user
+
+# verify usng the below comman
+
+# sh ```
+# kubectl auth can-i create deployments -n dev --as=system:serviceaccount:dev:dev-user
+# ```
