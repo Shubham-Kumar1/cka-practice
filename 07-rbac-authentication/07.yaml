@@ -1,0 +1,38 @@
+# Deny access to secrets using fine-grained Role.
+
+# 🔎 First principle
+# RBAC works by granting permissions.
+# If you don’t grant a permission, access is denied by default.
+# There is no “deny” verb in Kubernetes RBAC.
+# So, when you see a question like “deny access to secrets”, the expected solution is:
+# 👉 create a Role that grants other permissions, but exclude secrets.
+# That way, the ServiceAccount can do everything else in the namespace but cannot touch Secrets.
+
+---
+# create a role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: no-secrets-role
+  namespace: dev
+rules:
+- apiGroups: [""]
+  resources: ["pods", "configmaps", "services"]   # explicitly exclude secrets
+  verbs: ["get", "list", "watch"]
+
+
+---
+# Bind it to service-account
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: no-secrets-binding
+  namespace: dev
+subjects:
+- kind: ServiceAccount
+  name: dev-user
+  namespace: dev
+roleRef:
+  kind: Role
+  name: no-secrets-role
+  apiGroup: rbac.authorization.k8s.io
