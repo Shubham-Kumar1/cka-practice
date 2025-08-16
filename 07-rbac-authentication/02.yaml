@@ -1,0 +1,11 @@
+# Create a Role pod-reader to get/list Pods in namespace dev
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+  namespace: dev
+rules:
+- apiGroups: [""] # core-api group 
+  resources: ["Pods"]
+  verbs: ["get", "list", "watch"]
