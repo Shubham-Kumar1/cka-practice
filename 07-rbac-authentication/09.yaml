@@ -1,0 +1,32 @@
+# Revoke permissions by deleting RoleBinding.
+
+Exactly 👍 — in Kubernetes RBAC, permissions come from bindings.
+
+A Role/ClusterRole just defines what’s possible.
+
+A RoleBinding/ClusterRoleBinding is the glue that grants those permissions to a user/ServiceAccount.
+
+If you remove the binding → the subject loses access.
+
+
+kubectl auth can-i create deployments -n dev \                   
+  --as=system:serviceaccount:dev:dev-user
+yes
+
+kubectl get rolebindings -n dev                                  
+NAME                         ROLE                      AGE
+deployment-creator-binding   Role/deployment-creator   4m1s
+no-secrets-binding           Role/no-secrets-role      14m
+pod-reader-binding           Role/pod-reader           48m
+
+kubectl delete rolebindings deployment-creator-binding -n dev    
+rolebinding.rbac.authorization.k8s.io "deployment-creator-binding" deleted
+
+kubectl auth can-i create deployments -n dev \                   
+  --as=system:serviceaccount:dev:dev-user
+no
+
+kubectl get rolebindings -n dev                                  
+NAME                 ROLE                   AGE
+no-secrets-binding   Role/no-secrets-role   17m
+pod-reader-binding   Role/pod-reader        51m
