@@ -1,0 +1,8 @@
+# Create a ServiceAccount dev-user in namespace dev.
+
+# IMPERATIVE:  kubectl create sa dev-user -n dev -o yaml --dry-run=client                                                    kube kind-local
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: dev-user
+  namespace: dev
