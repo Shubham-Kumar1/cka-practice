@@ -1,0 +1,16 @@
+# Deny all egress except for TCP port 443.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: egress-except-port
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - {}
+    ports:
+    - protocol: TCP
+      port: 443
