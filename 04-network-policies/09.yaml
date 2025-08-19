@@ -1,0 +1,40 @@
+# Combine ingress and egress rules in one policy.
+apiVersion: networking.k8s.io/v1   # API version for NetworkPolicy
+kind: NetworkPolicy                # Kubernetes object kind
+
+metadata:
+  name: network-policy-all         # Name of the NetworkPolicy
+  namespace: default               # Namespace where this policy will be applied
+
+spec:
+  podSelector:                     # Select which Pods this policy applies to
+    matchLabels:
+      abc: def                     # Only Pods with label abc=def are affected
+
+  policyTypes:
+  - Ingress                        # Enforce rules on incoming connections
+  - Egress                         # Enforce rules on outgoing connections
+
+  ingress:                         # Incoming traffic rules
+  - from:                          # Allowed sources of ingress
+    - ipBlock:
+        cidr: 172.17.0.0/16        # Allow IPs in this CIDR range
+        except:
+        - 172.17.1.0/24            # But block this sub-range inside it
+    - namespaceSelector:
+        matchLabels:
+          app: my-app             # Allow from Pods in namespaces with label app=my-app
+    - podSelector:
+        matchLabels:
+          role: backend           # Allow from Pods in the *same namespace* labeled role=backend
+    ports:
+    - protocol: TCP               
+      port: 80                    # Only allow traffic on TCP port 80
+
+  egress:                          # Outgoing traffic rules
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24          # Allow outgoing traffic only to this CIDR block
+    ports:
+    - protocol: TCP               
+      port: 5978                  # Only allow egress on TCP port 5978
