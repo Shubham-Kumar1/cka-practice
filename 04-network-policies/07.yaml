@@ -1,0 +1,25 @@
+# Apply a policy to multiple Pod selectors.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: network-policy-multiple-pod-selector
+  namespace: default
+spec:
+  podSelector:
+    # iske niche wale pods pe network policy lagega jiska label dono ho (AND OPERATOR)
+    matchLabels:
+      role: db
+      tier: backend
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    - podSelector:
+        matchLabels:
+          role: monitoring
+    ports:
+    - protocol: TCP
+      port: 80
