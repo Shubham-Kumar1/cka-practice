@@ -1,0 +1,16 @@
+# Allow traffic only on TCP port 80 from Pods in same namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: traffic-only
+  namespace: default
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    podSelector: {}    # allows from any pod in the same namespace
+    ports:
+    - protocol: TCP
+      port: 80
