@@ -1,0 +1,11 @@
+# Create a default deny-all ingress NetworkPolicy for namespace dev.
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: dev
+spec:
+  podSelector: {} # this means policy applies to all the pods within the dev ns
+  policyTypes:
+  - Ingress     # The absence of ingress rules indicates that all inbound network traffic is denied by default.
