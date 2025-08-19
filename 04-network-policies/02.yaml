@@ -1,0 +1,18 @@
+# Allow ingress only from Pods with label role=frontend to app Pods.
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ingress-only
+  namespace: default
+spec:
+  podSelector:
+    matchlabels:
+      app: myapp # pods where network policy is applied
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+      matchlabels:  # pods from which ingress is allowed
+        role: frontend 
